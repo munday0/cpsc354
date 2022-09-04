@@ -51,7 +51,7 @@
 
 
 \title{CPSC-354 Report}
-\author{Your Name  \\ Chapman University}
+\author{Stephanie Munday  \\ Chapman University}
 
 \date{\today}
 
@@ -170,7 +170,72 @@ This section will contain your solutions to homework.
 
 \subsection{Week 1}
 
-For every week, you will have a subsection that contains your answers.
+HW 1 - Greatest Common Divisor
+
+\begin{lstlisting}
+def gcd(n, m):
+    while  n != m:
+        if  n > m:
+            n = n-m
+        else:
+            m = m-n
+    return n 
+\end{lstlisting}
+%
+The code above implements Euclid's algorithm to find the greatest common divisor in python. Below is an explanation given sample input gcd(9,33).
+
+\medskip\noindent
+While n != m, the code will compare whether or not n is greater than m. If n \textgreater{} m, n will become n -- m. Otherwise if n \textless{} m, m will become m -- n. When n == m, the greatest common divisor has been found.
+
+\medskip\noindent
+Keeping this logic in mind, let n = 9, m = 33.
+
+
+\begin{itemize}
+\item n = 9, m = 33
+\end{itemize}
+
+\medskip\indent\indent\
+9 \textless{} 33, so n = 9, m = 24
+
+\begin{itemize}
+\item n = 9, m = 24
+\end{itemize}
+
+\medskip\indent\indent\
+9 \textless{} 24, so n = 9, m = 15
+
+\begin{itemize}
+\item n = 9, m = 15
+\end{itemize}
+
+\medskip\indent\indent\
+9 \textless{} 15, so n = 9, m = 6
+
+\begin{itemize}
+\item n = 9, m = 6
+\end{itemize}
+
+\medskip\indent\indent\
+9 \textgreater{} 6, so n = 3, m = 6
+
+\begin{itemize}
+\item n = 3, m = 6
+\end{itemize}
+
+\medskip\indent\indent\
+3 \textless{} 6, so n = 3, m = 3
+
+\begin{itemize}
+\item n = 3, m = 3
+\end{itemize}
+
+\medskip\indent\indent\
+3 = 3
+
+\medskip\noindent
+Since n == m and the value of both is 3, the greatest common divisor is 3 for this example.
+
 
 \subsection{Week 2}
 
@@ -197,6 +262,8 @@ In the conclusion, I want a critical reflection on the content of the course. St
 
 \begin{thebibliography}{99}
 \bibitem[PL]{PL} \href{https://github.com/alexhkurz/programming-languages-2022/blob/main/README.md}{Programming Languages 2022}, Chapman University, 2022.
+\bibitem[P]{P} \href{https://tex.stackexchange.com/questions/2369/why-do-the-less-than-symbol-and-the-greater-than-symbol-appear-wrong-as}{Punctuation}, StackExchange, 2022.
+\bibitem[S]{S} \href{https://tex.stackexchange.com/questions/14526/spaces-behind-textgreater-not-working-as-expected}{Spacing}, StackExchange, 2022.
 \end{thebibliography}
 
 \end{document}
