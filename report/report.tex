@@ -190,48 +190,26 @@ While n != m, the code will compare whether or not n is greater than m. If n \te
 \medskip\noindent
 Keeping this logic in mind, let n = 9, m = 33.
 
+\medskip\noindent
+gcd(9,33) =
 
-\begin{itemize}
-\item n = 9, m = 33
-\end{itemize}
+\medskip\noindent
+gcd(9,24) =
 
-\medskip\indent\indent\
-9 \textless{} 33, so n = 9, m = 24
+\medskip\noindent
+gcd(9,15) =
 
-\begin{itemize}
-\item n = 9, m = 24
-\end{itemize}
+\medskip\noindent
+gcd(9,6) =
 
-\medskip\indent\indent\
-9 \textless{} 24, so n = 9, m = 15
+\medskip\noindent
+gcd(3,6) =
 
-\begin{itemize}
-\item n = 9, m = 15
-\end{itemize}
+\medskip\noindent
+gcd(3,3) =
 
-\medskip\indent\indent\
-9 \textless{} 15, so n = 9, m = 6
-
-\begin{itemize}
-\item n = 9, m = 6
-\end{itemize}
-
-\medskip\indent\indent\
-9 \textgreater{} 6, so n = 3, m = 6
-
-\begin{itemize}
-\item n = 3, m = 6
-\end{itemize}
-
-\medskip\indent\indent\
-3 \textless{} 6, so n = 3, m = 3
-
-\begin{itemize}
-\item n = 3, m = 3
-\end{itemize}
-
-\medskip\indent\indent\
-3 = 3
+\medskip\noindent
+3
 
 \medskip\noindent
 Since n == m and the value of both is 3, the greatest common divisor is 3 for this example.
@@ -239,7 +217,52 @@ Since n == m and the value of both is 3, the greatest common divisor is 3 for th
 
 \subsection{Week 2}
 
-\ldots
+HW 2 - Recursion in Functional Programming
+
+\begin{lstlisting}
+select_evens :: [a] -> [a]
+select_evens [] = []
+select_evens (x:(y:xs)) = y:select_evens(xs)
+
+select_odds :: [a] -> [a]
+select_odds [] = []
+select_odds (x:(y:xs)) = x:select_odds(xs)
+
+member :: (Eq a) => a -> [a] -> Bool
+member a [] = False
+member a (x:xs)
+    | a == x = True
+    | otherwise = a `member` xs
+
+append :: (Ord a) => [a] -> [a] -> [a]
+append [] [] = []
+append [] ys = ys
+append (x:xs) (ys) = x:append(xs) (ys)
+
+
+revert :: [a] -> [a]
+revert [] = []
+revert (x:xs) = revert xs ++ [x]
+
+less_equal :: (Ord a) => [a] -> [a] -> Bool
+less_equal [] [] = True
+less_equal (x:xs) (y:ys)
+    | x > y    = False
+    | otherwise = xs `less_equal` ys
+\end{lstlisting}
+%
+
+\noindent The code above implements select\_evens, select\_odds, member, append, revert, less\_equal as recursive functions in Haskell. Below is an explanation showing computations for append given inputs [1,2] [3,4,5].
+
+\medskip\noindent
+append [1,2] [3,4,5]
+
+\indent
+append [2] [3,4,5]
+
+\indent\indent
+append [] [3,4,5]
+
 
 \section{Project}
 
