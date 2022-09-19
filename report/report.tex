@@ -67,102 +67,8 @@ Short  summary of purpose and content.
 
 \section{Introduction}\label{intro}
 
-Replace this entire Section~\ref{intro} with your own short introduction. 
+This is the report for CPSC 354 Programming Languages. It will contain homework for each week, as well as project work and analysis.
 
-\subsection{General Remarks}
-
-First you need to \href{https://www.latex-project.org/get/}{download and install} LaTeX.\footnote{Links are typeset in blue, but you can change the layout and color of the links if you locate the  \texttt{hypersetup} command.}
-%
-For quick experimentation, you can use an online editor such as \href{https://www.overleaf.com/learn}{Overleaf}. But to grade the report I will used the time-stamped pdf-files in your git repository.  
-
- 
-\medskip\noindent
-LaTeX is a markup language (as is, for example, HTML). The source code is in a \verb+.tex+ file and needs to be compiled for viewing, usually to \verb+.pdf+.
-
-
-\medskip\noindent
-If you want to change the default layout, you need to type commands. For example, \verb+\medskip+ inserts a medium vertical space and \verb+\noindent+ starts a paragraph without indentation.
- 
-\medskip\noindent
-Mathematics is typeset between double dollars, for example $$x+y=y+x.$$
-
-
-\subsection{LaTeX Resources}
-
-I start a new subsection, so that you can see how it appears in the table of contents.
-
-\subsubsection{Subsubsections}
-
-Sometimes it is good to have subsubsections.
-
-\subsubsection{Itemize and enumerate}
-
-\begin{itemize}
-\item This is how you itemize in LaTeX.
-\item I think a good way to learn LaTeX is by starting from this template file and build it up step by step. Often stackoverflow will answer your questions. But here are a few resources:
-  \begin{enumerate}
-  \item \href{https://www.overleaf.com/learn/latex/Learn_LaTeX_in_30_minutes}{Learn LaTeX in 30 minutes}
-  \item \href{https://www.latex-project.org/}{LaTeX – A document preparation system}\end{enumerate}
-\end{itemize}
-
-\subsubsection{Typesetting Code}
-
-A typical project will involve code. For the example below I took the LaTeX code from \href{https://stackoverflow.com/a/3175141/4600290}{stackoverflow} and the Haskell code from \href{https://hackmd.io/@alexhkurz/HylLKujCP}{my tutorial}.
-
-\begin{lstlisting}
--- run the transition function on a word and a state
-run :: (State -> Char -> State) -> State -> [Char] -> State
-run delta q [] = q
-run delta q (c:cs) = run delta (delta q c) cs 
-\end{lstlisting}
-%
-Short snippets such as \texttt{run :: (State -> Char -> State) -> State -> [Char] -> State} can also be directly fitted into text. There are several ways of doing this, for example, \verb@run :: (State -> Char -> State) -> State -> [Char] -> State@ is slightly different in terms of spaces and linebreaking (and can lead to layout that is better avoided), as is
-\begin{verbatim}run :: (State -> Char -> State) -> State -> [Char] -> State\end{verbatim}
-
-\noindent
-For more on the topic see \href{https://www.overleaf.com/latex/examples/code-presentations-example-different-ways-shown-in-beamer-metropolis/tsxpnyjbhbds}{Code-Presentations Example}.
-
-\medskip\noindent
-Generally speaking,  the methods for displaying code discussed above work well only for short listings of code. For entire programs, it is better to have external links to, for example, Github or \href{https://replit.com/@alexhkurz/automata01#main.hs}{Replit} (click on the "Run" button and/or the ``Code" tab).
-
-\subsubsection{More Mathematics}
-
-We have already seen $x+y=y+x$ as an example of inline maths. We can also typeset mathematics in display mode, for example
-$$\frac x y =\frac{xy}{y^2},$$
-
-\noindent
-Here is an example of equational reasoning that spans several lines:
-\begin{align*}
-{\rm fib}(3)
-& = {\rm fib}(1) +{\rm fib}(2)  & {\rm fib}(n+2) = {\rm fib}(n)  + {\rm fib}(n+1) \\
-& = {\rm fib}(1) +{\rm fib}(0)  + {\rm fib}(1) & {\rm fib}(n+2) = {\rm fib}(n)  + {\rm fib}(n+1) \\
-& = 1 + 0  +1 & {\rm fib}(0) = 0,   {\rm fib}(1) = 1\\
-& = 2 & {\rm arithmetic}
-\end{align*}
-
-\subsubsection{Definitons, Examples, Theorems, Etc}
-
-\begin{definition} 
-This is a definition.
-\end{definition}
-
-\begin{example}
-This is an example.
-\end{example}
-
-\begin{proposition}
-This is a proposition.
-\end{proposition}
-
-\begin{theorem}
-This is a theorem.
-\end{theorem}
-
-\noindent You can also create your own environment, eg if you want to have Question, Notation, Conjecture, etc.
-
-\subsection{Plagiarism}
-
-To avoid plagiarism, make sure that in addition to \cite{PL} you also cite all the external sources you use. Make sure you cite all your references in your text, not only at the end.
 
 \section{Homework}\label{homework}
 
@@ -190,26 +96,16 @@ While n != m, the code will compare whether or not n is greater than m. If n \te
 \medskip\noindent
 Keeping this logic in mind, let n = 9, m = 33.
 
-\medskip\noindent
-gcd(9,33) =
-
-\medskip\noindent
-gcd(9,24) =
-
-\medskip\noindent
-gcd(9,15) =
-
-\medskip\noindent
-gcd(9,6) =
-
-\medskip\noindent
-gcd(3,6) =
-
-\medskip\noindent
-gcd(3,3) =
-
-\medskip\noindent
-3
+\begin{lstlisting}
+  gcd(9,33) =
+  gcd(9,24) =
+  gcd(9,15) =
+  gcd(9,6) =
+  gcd(3,6) =
+  gcd(3,3) =
+  3
+  \end{lstlisting}
+  %
 
 \medskip\noindent
 Since n == m and the value of both is 3, the greatest common divisor is 3 for this example.
@@ -239,10 +135,9 @@ append [] [] = []
 append [] ys = ys
 append (x:xs) (ys) = x:append(xs) (ys)
 
-
 revert :: [a] -> [a]
 revert [] = []
-revert (x:xs) = revert xs ++ [x]
+revert (x:xs) = append (revert xs) [x]
 
 less_equal :: (Ord a) => [a] -> [a] -> Bool
 less_equal [] [] = True
@@ -252,17 +147,188 @@ less_equal (x:xs) (y:ys)
 \end{lstlisting}
 %
 
-\noindent The code above implements select\_evens, select\_odds, member, append, revert, less\_equal as recursive functions in Haskell. Below is an explanation showing computations for append given inputs [1,2] [3,4,5].
+\noindent The code above implements select\_evens, select\_odds, member, append, revert, less\_equal as recursive functions in Haskell. Below are explanations showing computations for given inputs. \newline
 
-\medskip\noindent
-append [1,2] [3,4,5]
+\noindent
+Select Evens example: 
+\newline\newline\indent
+Select Evens ["a","b","c","d"]
+\begin{lstlisting}
+select_evens ["a","b","c","d"] = 
+    "b" : (select_evens ["c","d"]) =
+    "b" : ("d" : (select_evens [])) =
+    ["b","d"]
+\end{lstlisting}
+%
 
-\indent
-append [2] [3,4,5]
+\noindent
+Select Odds example: 
+\newline\newline\indent
+Select Odds ["a","b","c","d"]
+\begin{lstlisting}
+select_odds ["a","b","c","d"] = 
+    "a" : (select_odds ["c","d"]) =
+    "a" : ("c" : (select_odds [])) =
+    ["a","c"]
+\end{lstlisting}
+%
 
-\indent\indent
-append [] [3,4,5]
+\noindent
+Member example: 
+\newline\newline\indent
+Member 2 [5,2,6]
+\begin{lstlisting}
+member 2 [5,2,6] = 
+    2 != 5 : (member 2 [2,6]) =
+    2 != 5 : (2 == 2) =
+    True
+\end{lstlisting}
+%
 
+\noindent
+Append example: 
+\newline\newline\indent
+Append [1,2,3] [4,5]
+\begin{lstlisting}
+append [1,2,3] [4,5] = 
+    1 : (append [2,3] [4,5]) = 
+    1 : (2 : (append [3] [4,5])) = 
+    1 : (2 : (3 : (append [] [4,5]))) = 
+    1 : (2 : (3 : [4,5])) = 
+    [1,2,3,4,5]
+\end{lstlisting}
+%
+
+\noindent
+Revert example: 
+\newline\newline\indent
+Revert [1,2,3]
+\begin{lstlisting}
+revert [1,2,3] = 
+    append(revert [2,3], [1]) =
+    append(revert [2,3], [1]) : append(revert [3], [2]) =
+    append(revert [2,3], [1]) : append(revert [3], [2]) : append(revert [], [3]) =
+    [3,2,1]
+\end{lstlisting}
+%
+
+\noindent
+Less Equal example: 
+\newline\newline\indent
+Less Equal [1,2,3] [2,3,4]
+\begin{lstlisting}
+less_equal [1,2,3] [2,3,4] = 
+    1 !> 2 : (less_equal [2,3] [3,4]) =
+    1 !> 2 : (2 !> 3 : (less_equal [3] [4])) =
+    1 !> 2 : (2 !> 3 : (3 !> 4 : (less_equal [] []))) =
+    True
+\end{lstlisting}
+%
+
+\subsection{Week 3}
+
+HW 3 - Towers of Hanoi
+
+\begin{lstlisting}
+hanoi 5 0 2  
+	hanoi 4 0 1 
+		hanoi 3 0 2
+			hanoi 2 0 1 
+				hanoi 1 0 2 = move 0 2 
+				move 0 1
+				hanoi 1 2 1 = move 2 1 
+			move 0 2  
+			hanoi 2 1 2  
+				hanoi 1 1 0 = move 1 0  
+				move 1 2  
+				hanoi 1 0 2 = move 0 2 
+        move 0 1
+        hanoi 3 2 1
+            hanoi 2 2 0
+                hanoi 1 2 1 = move 2 1
+                move 2 0
+                hanoi 1 1 0 = move 1 0
+            move 2 1
+            hanoi 2 0 1
+                hanoi 1 0 2 = move 0 2
+                move 0 1
+                hanoi 1 2 1 = move 2 1
+    move 0 2
+    hanoi 4 1 2
+        hanoi 3 1 0
+            hanoi 2 1 2
+                hanoi 1 1 0 = move 1 0
+                move 1 2
+                hanoi 1 0 2 = move 0 2
+            move 1 0
+            hanoi 2 2 0
+                hanoi 1 2 1 = move 2 1
+                move 2 0
+                hanoi 1 1 0 = move 1 0
+        move 1 2
+        hanoi 3 0 2
+            hanoi 2 0 1
+                hanoi 1 0 2 = move 0 2
+                move 0 1
+                hanoi 1 2 1 = move 2 1
+            move 0 2
+            hanoi 2 1 2
+                hanoi 1 1 0 = move 1 0
+                move 1 2
+                hanoi 1 0 2 = move 0 2
+\end{lstlisting}
+%
+
+In order to solve the puzzle, the moves are as follows:
+\begin{lstlisting}
+move 0 2 
+move 0 1
+move 2 1 
+move 0 2  
+move 1 0  
+move 1 2  
+move 0 2 
+move 0 1
+move 2 1
+move 2 0
+move 1 0
+move 2 1
+move 0 2
+move 0 1
+move 2 1
+move 0 2
+move 1 0
+move 1 2
+move 0 2
+move 1 0
+move 2 1
+move 2 0
+move 1 0
+move 1 2
+move 0 2
+move 0 1
+move 2 1
+move 0 2
+move 1 0
+move 1 2
+move 0 2
+\end{lstlisting}
+%
+
+\noindent
+The word "hanoi" appears in the computation 31 times.
+\newline\newline 
+This computation can be expressed as a formula that works for moving any number of disks n as:
+
+\begin{lstlisting}
+hanoi 1 x y = move x y
+
+hanoi (n+1) x y = 
+	hanoi n x (other x y) 
+	move x y 
+	hanoi n (other x y) y
+\end{lstlisting}
+%
 
 \section{Project}
 
