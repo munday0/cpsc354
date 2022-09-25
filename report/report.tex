@@ -330,6 +330,72 @@ hanoi (n+1) x y =
 \end{lstlisting}
 %
 
+\subsection{Week 4}
+
+HW 4 - Parsing and Context-Free Grammars
+
+\begin{lstlisting}
+Abstract Syntax Tree: 2 + 1
+    Plus (Num 2) (Num 1)
+\end{lstlisting}
+%
+\Tree [.Plus [.Num 2 ] [.Num 1 ]]
+
+\begin{lstlisting}
+Abstract Syntax Tree: 1 + 2 * 3
+    Plus (Num 1) (Times (Num 2) (Num 3))
+\end{lstlisting}
+%
+\Tree [.Plus [.Num 1 ] [.Times [.Num 2 ] [.Num 3 ]]]
+
+\begin{lstlisting}
+Abstract Syntax Tree: 1 + (2 * 3)
+    Plus (Num 1) (Times (Num 2) (Num 3))
+\end{lstlisting}
+%
+\Tree [.Plus [.Num 1 ] [.Times [.Num 2 ] [.Num 3 ]]]
+
+\begin{lstlisting}
+Abstract Syntax Tree: (1 + 2) * 3
+    Times (Plus (Num 1) (Num 2)) (Num 3)
+\end{lstlisting}
+%
+\Tree [.Times [.Plus [.Num 1 ] [.Num 2 ]] [.Num 3 ]]
+
+\begin{lstlisting}
+Abstract Syntax Tree: 1 + 2 * 3 + 4 * 5 + 6
+    Plus (Plus (Plus (Num 1) (Times (Num 2) (Num 3))) (Times (Num 4) (Num 5))) (Num 6)
+\end{lstlisting}
+%
+\Tree [.Plus [.Plus [.Plus [.Num 1 ] [.Times [.Num 2 ] [.Num 3 ]]] [.Times [.Num 4 ] [.Num 5 ]]] [.Num 6 ]]
+
+\begin{lstlisting}
+Abstract Syntax Tree: 1 + 2 + 3
+    Plus (Plus (Num 1) (Num 2)) (Num 3)
+\end{lstlisting}
+%
+\Tree [.Plus [.Plus [.Num 1 ] [.Num 2 ]] [.Num 3 ]]
+
+\begin{lstlisting}
+Abstract Syntax Tree: (1 + 2) + 3
+    Plus (Plus (Num 1) (Num 2)) (Num 3)
+\end{lstlisting}
+%
+\Tree [.Plus [.Plus [.Num 1 ] [.Num 2 ]] [.Num 3 ]]
+
+\begin{lstlisting}
+Abstract Syntax Tree: 1 + (2 + 3)
+    Plus (Num 1) (Plus (Num 2) (Num 3))
+\end{lstlisting}
+%
+\Tree [.Plus [.Num 1 ] [.Plus [.Num 2 ] [.Num 3 ]]]
+
+\begin{lstlisting}
+The abstract syntax tree of 1+2+3 is identical to the one of (1+2)+3, but not the one of 1+(2+3).
+\end{lstlisting}
+%
+
+
 \section{Project}
 
 Introductory remarks ...
@@ -353,6 +419,7 @@ In the conclusion, I want a critical reflection on the content of the course. St
 \bibitem[PL]{PL} \href{https://github.com/alexhkurz/programming-languages-2022/blob/main/README.md}{Programming Languages 2022}, Chapman University, 2022.
 \bibitem[P]{P} \href{https://tex.stackexchange.com/questions/2369/why-do-the-less-than-symbol-and-the-greater-than-symbol-appear-wrong-as}{Punctuation}, StackExchange, 2022.
 \bibitem[S]{S} \href{https://tex.stackexchange.com/questions/14526/spaces-behind-textgreater-not-working-as-expected}{Spacing}, StackExchange, 2022.
+\bibitem[T]{T} \href{http://sznfong.scripts.mit.edu/site/wp-content/uploads/2018/03/treedrawingtutorialv2.pdf}{Trees}, Massachusetts Institute of Technology, 2022.
 \end{thebibliography}
 
 \end{document}
