@@ -1,5 +1,7 @@
 \documentclass{article}
 
+\usepackage{qtree}
+
 \usepackage{amsthm}
 \usepackage{amsfonts}
 \usepackage{amsmath}
@@ -97,15 +99,15 @@ While n != m, the code will compare whether or not n is greater than m. If n \te
 Keeping this logic in mind, let n = 9, m = 33.
 
 \begin{lstlisting}
-  gcd(9,33) =
-  gcd(9,24) =
-  gcd(9,15) =
-  gcd(9,6) =
-  gcd(3,6) =
-  gcd(3,3) =
-  3
-  \end{lstlisting}
-  %
+gcd(9,33) =
+gcd(9,24) =
+gcd(9,15) =
+gcd(9,6) =
+gcd(3,6) =
+gcd(3,3) =
+3
+\end{lstlisting}
+%
 
 \medskip\noindent
 Since n == m and the value of both is 3, the greatest common divisor is 3 for this example.
@@ -179,8 +181,7 @@ Member example:
 Member 2 [5,2,6]
 \begin{lstlisting}
 member 2 [5,2,6] = 
-    2 != 5 : (member 2 [2,6]) =
-    2 != 5 : (2 == 2) =
+    member 2 [2,6] =
     True
 \end{lstlisting}
 %
@@ -206,8 +207,15 @@ Revert [1,2,3]
 \begin{lstlisting}
 revert [1,2,3] = 
     append(revert [2,3], [1]) =
-    append(revert [2,3], [1]) : append(revert [3], [2]) =
-    append(revert [2,3], [1]) : append(revert [3], [2]) : append(revert [], [3]) =
+    append(append (revert [3]) [2]) [1] =
+    append(append (append (revert []) [3]) [2]) [1] = 
+    append(append (append [] [3]) : [2]) [1] =
+    append(append [3] [2]) [1] =
+    append 3 : (2) [1] =
+    append [3,2] [1] =
+    3 : (append [2] [1]) =
+    3 : (2 : (append [] [1])) =
+    3 : (2 : 1) =
     [3,2,1]
 \end{lstlisting}
 %
@@ -218,9 +226,8 @@ Less Equal example:
 Less Equal [1,2,3] [2,3,4]
 \begin{lstlisting}
 less_equal [1,2,3] [2,3,4] = 
-    1 !> 2 : (less_equal [2,3] [3,4]) =
-    1 !> 2 : (2 !> 3 : (less_equal [3] [4])) =
-    1 !> 2 : (2 !> 3 : (3 !> 4 : (less_equal [] []))) =
+    less_equal [2,3] [3,4] =
+    less_equal [3] [4] =
     True
 \end{lstlisting}
 %
@@ -321,6 +328,15 @@ The word "hanoi" appears in the computation 31 times.
 This computation can be expressed as a formula that works for moving any number of disks n as:
 
 \begin{lstlisting}
+hanoi(n+1) x y = hanoi n x(other x y)
+move x y
+hanoi n(other x y)y
+\end{lstlisting}
+%
+
+
+
+\begin{lstlisting}
 hanoi 1 x y = move x y
 
 hanoi (n+1) x y = 
@@ -409,19 +425,19 @@ x = EVar (Id "x")
 x x = EApp (EVar (Id "x") EVar (Id "x"))
 \end{lstlisting}
 %
-\Tree [.EApp [.EVar [.Id x ] [.EVar [.Id x ]]]]
+\Tree [.EApp [.EVar [.Id x ]] [.EVar [.Id x ]]]
 
 \begin{lstlisting}
 x y = EApp (EVar (Id "x") EVar (Id "y"))
 \end{lstlisting}
 %
-\Tree [.EApp [.EVar [.Id x ] [.EVar [.Id y ]]]]
+\Tree [.EApp [.EVar [.Id x ]] [.EVar [.Id y ]]]
 
 \begin{lstlisting}
 x y z = EApp (EVar (Id "x") EVar (Id "y")) EVar (Id "z"))
 \end{lstlisting}
 %
-\Tree [.EApp [.EVar [.Id x ] [.EVar [.Id y ]]][.EVar [.Id z ]]]
+\Tree [.EApp [.EApp [.EVar [.Id x ]] [.EVar [.Id y ]]] [.EVar [.Id z ]]]
 
 \begin{lstlisting}
 \ x.x = Prog (EAbs(Id "x" EVar(Id "x")))
@@ -433,7 +449,7 @@ x y z = EApp (EVar (Id "x") EVar (Id "y")) EVar (Id "z"))
 (\x.x) x = Prog(EApp(EAbs(Id "x" EVar(Id "x")) EVar(Id "x")))
 \end{lstlisting}
 %
-\Tree [.Prog [.EApp [.EAbs [.Id x ] [.EVar [.Id x ]]]] [.EVar [.Id x ]]]
+\Tree [.Prog [.EApp [.EAbs [.Id x ] [.EVar [.Id x ]]] [.EVar [.Id x ]]]]
 
 \begin{lstlisting}
 (\ x . (\ y . x y)) (\ x.x) z = Prog(EApp(EApp(EAbs(Id "x", EAbs(Id "y", EApp(EVar(Id "x"), EVar(Id "y")))), EAbs(Id "x", EVar(Id "x"))), EVar(Id "z")))
@@ -442,10 +458,10 @@ x y z = EApp (EVar (Id "x") EVar (Id "y")) EVar (Id "z"))
 \Tree [.Prog [.EApp [.EApp [.EAbs [.Id x ] [.EAbs [.Id y ] [.EApp [.EVar [.Id x ]] [.EVar [.Id y ]]]]] [.EAbs [.Id x ] [.EVar [.Id x ]]]] [.EVar [.Id z ]]]]
 
 \begin{lstlisting}
-(\ x . \ y . x y z) a b c = Prog(EApp(EApp(EAbs(Id "x", EAbs(Id "y", EApp(EApp(EVar(Id "x"), EVar(Id "y")), EVar(Id "z")))), EVar(Id "a")), EVar(Id "b")))
+(\ x . \ y . x y z) a b c = Prog(EApp(EApp(EApp(EAbs(Id "x", EAbs(Id "y", EApp(EApp(EVar(Id "x"), EVar(Id "y")), EVar(Id "z")))), EVar(Id "a")), EVar(Id "b")), EVar(Id "c")))
 \end{lstlisting}
 %
-\Tree  [.Prog [.EApp [.EApp [.EAbs [.Id x ] [.EAbs [.Id y ] [.EApp [.EApp [.EVar [.Id x ]] [.EVar [.Id y ]]] [.EVar [.Id z ]]]]] [.EVar [.Id a ]]] [.EVar [.Id b ]]]]
+\Tree  [.Prog [.EApp [.EApp [.EApp [.EAbs [.Id x ] [.EAbs [.Id y ] [.EApp [.EApp [.EVar [.Id x ]] [.EVar [.Id y ]]] [.EVar [.Id z ]]]]] [.EVar [.Id a ]]] [.EVar [.Id b ]]] [.EVar [.Id c ]]]]]
 
 Semantics
 \begin{lstlisting}
@@ -474,7 +490,10 @@ Semantics
 (\x.\y.x) (a b c) = \y.a b c
 
 (\x.\y.y) (a b c) = \y.y
+\end{lstlisting}
+%
 
+\begin{lstlisting}
 - Evaluate (\x.x)((\y.y)a) by executing the function evalCBN
 
 evalCBN(EApp (EAbs (Id "x") (EVar (Id "x"))) (EApp (EAbs (Id "y") (EVar (Id "y"))) (EVar (Id "a")))) = 
@@ -486,14 +505,40 @@ EVar (Id "a")
 \end{lstlisting}
 %
 
+\subsection{Week 6}
+Evaluate
+\begin{lstlisting}
+(\exp . \two . \three . exp two three)
+(\m.\n. m n)
+(\f.\x. f (f x))
+(\f.\x. f (f (f x)))
+=
+((\m.\n. m n) (\f.\x. f (f x)) (\f2.\x2. f2 (f2 (f2 x2))))
+=
+((.\n. (\f.\x. f (f x)) n)  (\f2.\x2. f2 (f2 (f2 x2))))
+=
+((\f.\x. f (f x)) (\f2.\x2. f2 (f2 (f2 x2))))
+=
+((\x. (\f2.\x2. f2 (f2 (f2 x2))) ((\f3.\x3. f3 (f3 (f3 x3))) x)))
+=
+((\x. (\f2.\x2. f2 (f2 (f2 x2))) ((\x3. x (x (x x3))))))
+=
+(\x. (\x2. (\x3. x (x (x x3))) ((\x4. x5 (x5 (x5 x4))) ((\x6. x7 (x7 (x7 x6))) x2))))
+=
+(\x. (\x2. (\x3. x (x (x x3))) ((\x4. x5 (x5 (x5 x4))) (x7 (x7 (x7 x2))))))
+=
+(\x. (\x2. (x (x (x (x5 (x5 (x5 (x7 (x7 (x7 x2)))))))))))
+=
+\x. (\x2. (x (x (x (x5 (x5 (x5 (x7 (x7 (x7 x2))))))))))
+\end{lstlisting}
+%
 
 \section{Project}
 
-Introductory remarks ...
-
-The following structure should be suitable for most practical projects. 
+This section details the project.
 
 \subsection{Specification}
+For this project, I plan to learn a combination of HTML, javascript, and css to build a portfolio website. 
 \subsection{Prototype}
 \subsection{Documentation}
 \subsection{Critical Appraisal}
