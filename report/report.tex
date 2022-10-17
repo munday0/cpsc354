@@ -496,11 +496,11 @@ Semantics
 \begin{lstlisting}
 - Evaluate (\x.x)((\y.y)a) by executing the function evalCBN
 
-evalCBN(EApp (EAbs (Id "x") (EVar (Id "x"))) (EApp (EAbs (Id "y") (EVar (Id "y"))) (EVar (Id "a")))) = 
-evalCBN (EApp (EAbs (Id "x") (EVar (Id "x"))) subst (Id "y") (EVar (Id "a")) (EVar (Id "y"))) =
-evalCBN (EApp (EAbs (Id "x") (EVar (Id "x"))) EVar (Id "a")) =
-evalCBN (subst (Id "x") (EVar (Id "a")) (EVar (Id "x"))) =
-evalCBN (EVar (Id "a")) =
+evalCBN(EApp (EAbs (Id "x") (EVar (Id "x"))) (EApp (EAbs (Id "y") (EVar (Id "y"))) (EVar (Id "a")))) = line 6
+evalCBN (EApp (EAbs (Id "x") (EVar (Id "x"))) subst (Id "y") (EVar (Id "a")) (EVar (Id "y"))) = line 15
+evalCBN (EApp (EAbs (Id "x") (EVar (Id "x"))) EVar (Id "a")) = line 6
+evalCBN (subst (Id "x") (EVar (Id "a")) (EVar (Id "x"))) = line 15
+evalCBN (EVar (Id "a")) = line 8
 EVar (Id "a")
 \end{lstlisting}
 %
@@ -530,6 +530,265 @@ Evaluate
 (\x. (\x2. (x (x (x (x5 (x5 (x5 (x7 (x7 (x7 x2)))))))))))
 =
 \x. (\x2. (x (x (x (x5 (x5 (x5 (x7 (x7 (x7 x2))))))))))
+\end{lstlisting}
+%
+
+\subsection{Week 7}
+Explain whether each variable is bound or free - if it is bound, say the binder and scope of the variable.
+\begin{lstlisting}
+Lines 5-7
+evalCBN (EApp e1 e2) = case (evalCBN e1) of
+    (EAbs i e3) -> evalCBN (subst i e2 e3)
+    e3 -> EApp e3 e2
+\end{lstlisting}
+%
+
+\indent
+e1
+\begin{itemize}
+  \item bound
+  \item binder is (EApp e1 e2)
+  \item scope is the contents of the evalCBN function
+\end{itemize}
+
+\indent
+e2
+\begin{itemize}
+  \item bound
+  \item binder is (EApp e1 e2)
+  \item scope is the contents of the evalCBN function
+\end{itemize}
+
+\indent
+i
+\begin{itemize}
+  \item bound
+  \item binder is (EAbs i e3)
+  \item scope is contents of evalCBN function
+\end{itemize}
+
+\indent
+e3
+\begin{itemize}
+  \item bound
+  \item binder is (EAbs i e3)
+  \item scope is scope is contents of evalCBN function
+\end{itemize}
+
+
+\begin{lstlisting}
+Lines 18-22
+subst id s (EAbs id1 e1) = 
+    -- to avoid variable capture, we first substitute id1 with a fresh name inside the body of the lambda-abstraction, obtaining e2. Only then do we proceed to apply substitution of the original s for id in the body e2.
+    let f = fresh (EAbs id1 e1)
+        e2 = subst id1 (EVar f) e1 in 
+        EAbs f (subst id s e2)
+\end{lstlisting}
+%
+
+\indent
+id
+\begin{itemize}
+  \item bound
+  \item binder is subst id
+  \item scope is contents of subst function
+\end{itemize}
+
+\indent
+s
+\begin{itemize}
+  \item bound
+  \item binder is subst s
+  \item scope is contents of subst function
+\end{itemize}
+
+\indent
+id1
+\begin{itemize}
+  \item bound 
+  \item binder is (EAbs id1 e1)
+  \item scope is contents of subst function
+\end{itemize}
+
+\indent
+e1
+\begin{itemize}
+  \item bound
+  \item binder is (EAbs id1 e1)
+  \item scope is contents of subst function
+\end{itemize}
+
+\indent
+f
+\begin{itemize}
+  \item free 
+\end{itemize}
+
+\indent
+e2
+\begin{itemize}
+  \item free
+\end{itemize}
+
+\begin{lstlisting}
+- Evaluate (\x.\y.x) y z by executing the function evalCBN
+
+evalCBN(EApp (EAbs (Id "x") (EAbs (Id "y") (EVar (Id "z")))) (EVar (Id "y")) (EVar (Id "z"))) = line 6
+evalCBN (subst (Id "x") (EVar (Id "y")) (EVar (Id "x")) (EAbs (Id "y") (EVar (Id "x")))(EVar (Id "z"))) = line 15
+evalCBN (EApp (EAbs (Id "y") (EVar (Id "y1"))) EVar (Id "z")) = line 6
+evalCBN (subst (Id "y") (EVar (Id "z")) (EVar (Id "y1"))) = line 16
+evalCBN (EVar (Id "y1")) = line 8
+EVar (Id "y1")
+\end{lstlisting}
+%
+
+Rewriting Introduction
+\begin{lstlisting}
+1. A = {}
+---------
+|       |
+|       |
+---------
+
+- terminates - yes
+- confluent - yes
+- unique normal forms - yes
+
+
+2. A = {a} and R = {}
+---------
+|   a   |
+|       |
+---------
+
+- terminates - yes
+- confluent - yes
+- unique normal forms - no
+
+
+3. A = {a} and R = {(a,a)}
+    
+    ----->
+    |    |
+    a <---
+
+- terminates - no
+- confluent - no
+- unique normal forms - no
+
+
+4. A = {a,b,c} and R = {(a,b),(a,c)}
+    
+        a
+       / \
+      /   \
+     b     c
+
+- terminates - yes
+- confluent - no
+- unique normal forms - no
+
+
+5. A = {a,b} and R = {(a,a),(a,b)}
+    
+    ----->
+    |    |
+    a <---
+    |
+    b
+
+- terminates - no
+- confluent - yes
+- unique normal forms - yes
+
+
+6. A = {a,b,c} and R = {(a,b),(b,b),(a,c)}
+    
+        a
+       / \
+      /   \
+  --> b    c
+  |   |
+  <----
+
+- terminates - no
+- confluent - no
+- unique normal forms - no
+
+
+7. A = {a,b,c} and R = {(a,b),(b,b),(a,c),(c,c)}
+    
+        a
+       / \
+      /   \
+  --> b    c -->
+  |   |    |   |
+  <----    <----
+
+- terminates - no
+- confluent - no
+- unique normal forms - no
+
+\end{lstlisting}
+%
+
+Find an example of an ARS for each of the possible 8 combinations - draw pictures.
+
+
+\begin{lstlisting}
+1. confluent, terminating, has unique normal forms
+    A = {a,b} and R = {(a,b)}
+        a
+        |
+        b
+
+2. confluent, terminating, doesn't have unique normal forms
+
+    - not possible
+
+3. confluent, not terminating, has unique normal forms
+
+    A = {a,b} and R = {(a,a),(a,b)}
+        
+        ----->
+        |    |
+        a <---
+        |
+        b
+
+4. confluent, not terminating, doesn't have unique normal forms
+
+    - not possible
+
+5. not confluent, terminating, has unique normal forms
+
+    - not possible OR see answer for #1 (then the other answer will be not possible)
+
+6. not confluent, terminating, doesn't have unique normal forms
+
+    A = {a,b,c} and R = {(a,b),(a,c)}
+        
+            a
+           / \
+          /   \
+         b     c
+
+7. not confluent, not terminating, has unique normal forms
+
+    - not possible
+
+6. not confluent, not terminating, doesn't have unique normal forms
+
+    A = {a,b,c} and R = {(a,b),(b,b),(a,c)}
+        
+            a
+           / \
+          /   \
+      --> b    c
+      |   |
+      <----
+
+
 \end{lstlisting}
 %
 
