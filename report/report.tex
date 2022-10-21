@@ -544,35 +544,45 @@ evalCBN (EApp e1 e2) = case (evalCBN e1) of
 %
 
 \indent
-e1
+e1 (line 5)
 \begin{itemize}
-  \item bound
-  \item binder is (EApp e1 e2)
-  \item scope is the contents of the evalCBN function
+  \item bound on the left of =
+  \item scope is the end of line 7
 \end{itemize}
 
 \indent
-e2
+e2 (line 5)
 \begin{itemize}
-  \item bound
-  \item binder is (EApp e1 e2)
-  \item scope is the contents of the evalCBN function
+  \item bound on the left of =
+  \item scope is the end of line 7
 \end{itemize}
 
 \indent
-i
+i (line 6)
 \begin{itemize}
-  \item bound
-  \item binder is (EAbs i e3)
-  \item scope is contents of evalCBN function
+  \item bound on the left of ->
+  \item scope is the end of line 6
 \end{itemize}
 
 \indent
-e3
+e3 (line 6)
 \begin{itemize}
-  \item bound
-  \item binder is (EAbs i e3)
-  \item scope is scope is contents of evalCBN function
+  \item bound on the left of ->
+  \item scope is the end of line 6
+\end{itemize}
+
+\indent
+e3 (line 7)
+\begin{itemize}
+  \item bound on the left of ->
+  \item scope is the end of line 7
+\end{itemize}
+
+\indent
+x (line 8)
+\begin{itemize}
+  \item bound on the left of =
+  \item scope is the end of line 8
 \end{itemize}
 
 
@@ -587,47 +597,45 @@ subst id s (EAbs id1 e1) =
 %
 
 \indent
-id
+id (line 18)
 \begin{itemize}
-  \item bound
-  \item binder is subst id
-  \item scope is contents of subst function
+  \item bound on the left of =
+  \item scope is to the end of line 22
 \end{itemize}
 
 \indent
-s
+s (line 18)
 \begin{itemize}
-  \item bound
-  \item binder is subst s
-  \item scope is contents of subst function
+  \item bound on the left of =
+  \item scope is to the end of line 22
 \end{itemize}
 
 \indent
-id1
+id1 (line 18)
 \begin{itemize}
-  \item bound 
-  \item binder is (EAbs id1 e1)
-  \item scope is contents of subst function
+  \item bound on the left of =
+  \item scope is to the end of line 22
 \end{itemize}
 
 \indent
-e1
+e1 (line 18)
 \begin{itemize}
-  \item bound
-  \item binder is (EAbs id1 e1)
-  \item scope is contents of subst function
+  \item bound on the left of =
+  \item scope is to the end of line 22
 \end{itemize}
 
 \indent
-f
+f (line 20)
 \begin{itemize}
-  \item free 
+  \item bound on the left of =
+  \item scope is to the end of line 22
 \end{itemize}
 
 \indent
-e2
+e2 (line 21)
 \begin{itemize}
-  \item free
+  \item bound on the left of =
+  \item scope is to the end of line 22
 \end{itemize}
 
 \begin{lstlisting}
@@ -663,7 +671,7 @@ Rewriting Introduction
 
 - terminates - yes
 - confluent - yes
-- unique normal forms - no
+- unique normal forms - yes
 
 
 3. A = {a} and R = {(a,a)}
@@ -673,7 +681,7 @@ Rewriting Introduction
     a <---
 
 - terminates - no
-- confluent - no
+- confluent - yes
 - unique normal forms - no
 
 
@@ -758,11 +766,16 @@ Find an example of an ARS for each of the possible 8 combinations - draw picture
 
 4. confluent, not terminating, doesn't have unique normal forms
 
-    - not possible
+       A = {a,b,c} and R = {(a,b),(a,c),(b,a),(c,a)}
+        
+        --> a <--
+        |  / \  |
+        | /   \ |
+        b       c
 
 5. not confluent, terminating, has unique normal forms
 
-    - not possible OR see answer for #1 (then the other answer will be not possible)
+    - not possible
 
 6. not confluent, terminating, doesn't have unique normal forms
 
@@ -777,7 +790,7 @@ Find an example of an ARS for each of the possible 8 combinations - draw picture
 
     - not possible
 
-6. not confluent, not terminating, doesn't have unique normal forms
+8. not confluent, not terminating, doesn't have unique normal forms
 
     A = {a,b,c} and R = {(a,b),(b,b),(a,c)}
         
@@ -791,6 +804,35 @@ Find an example of an ARS for each of the possible 8 combinations - draw picture
 
 \end{lstlisting}
 %
+
+\subsection{Week 8}
+Answer the questions about the rewrite system
+
+\begin{lstlisting}
+  aa -> a
+  bb -> b
+  ba -> ab
+  ab -> ba
+
+Why does the ARS not terminate?
+    The ARS doesn't terminate because the two rules ba -> ab and ab -> ba are circular.
+
+What are the normal forms?
+    The normal forms are a, b
+
+Can you change the rules so that the new ARS has unique normal forms (but still has the same equivalence relation)?
+    aa -> a
+    bb -> b
+    ba -> ab
+    ab -> ba
+    b -> a
+
+What do the normal forms mean? Describe the function implemented by the ARS.
+    The normal forms mean that at that point, nothing can be reduced further. The ARS takes a string consisting of a's and b's. If there are doubles (ie aa or bb), then the length of those doubles is reduced. In the case of ba or ab, then the letters are flipped.
+
+\end{lstlisting}
+%
+
 
 \section{Project}
 
