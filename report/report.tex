@@ -833,6 +833,43 @@ What do the normal forms mean? Describe the function implemented by the ARS.
 \end{lstlisting}
 %
 
+\subsection{Week 9}
+Project milestones
+\begin{lstlisting}
+Milestone 1:
+    A website mockup depicting the layout and overall visual structure of the website. Begin taking notes on history/learning process of html/css.
+
+Milestone 2:
+    A bare bones structure/base code for the website. Continue notes on learning html/css.
+
+Milestone 3:
+    Implement stylistic choices for website. Synthesize notes on html/css learning process - organize and take note of issues/things I wish I had done that would've made the process easier.
+
+\end{lstlisting}
+
+
+\begin{lstlisting}
+Consider the ARS (A,->) where A is the set of words over the alphabet {a,b,c} and -> is defined via the following schema of rules.
+
+ba -> ab
+ab -> ba
+ac -> ca
+ca -> ac
+bc -> cb
+cb -> bc
+ 
+aa -> b
+ab -> c
+ac ->  
+bb -> 
+cb -> a
+cc -> b
+
+The upper section of the ARS (involving ba, ab, ac, ca, bc, cb) is circular. There is a possibility that words could be arranged in a way to allow the lower section to come into play. If ba -> ab and to the right is another ba, then we would have abba. Then using bb -> , the resulting form could potentially be aa, then b. However, it is unknown if this would ever be the case, as another possibility is that abba becomes abab or baba. Additionally, ab reduces both to ba and also c, adding yet another possibility. 
+
+
+\end{lstlisting}
+
 
 \section{Project}
 
