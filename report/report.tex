@@ -870,6 +870,23 @@ The upper section of the ARS (involving ba, ab, ac, ca, bc, cb) is circular. The
 
 \end{lstlisting}
 
+\subsection{Week 10}
+Activity and Homework:
+\newline\indent
+Let F be $\lambda$f.$\lambda$n. if n == 0 then 1 else f(n-1) * n and reduce fixF 2.
+\newline\indent
+fixF $\approx$ FfixF (computation rule)
+
+\begin{lstlisting}
+fixF 2 = FfixF 2 = if 2 == 0 then 1 else fixF (2-1)*2  --> assume we have a function for 2-1
+                   = (fixF 1) * 2
+                   = (FfixF 1 = if 1 == 0 then 1 else fixF (1-1) * 2) * 2
+                                = (fixF 0) * 4
+                                = (FfixF 0 if 0 == 0 then 1) * 4
+                                = 1 * 4
+                                = 4
+               
+\end{lstlisting}
 
 \section{Project}
 
