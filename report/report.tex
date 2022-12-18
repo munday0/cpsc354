@@ -358,6 +358,11 @@ Abstract Syntax Tree: 2 + 1
 \Tree [.Plus [.Num 2 ] [.Num 1 ]]
 
 \begin{lstlisting}
+Concrete Syntax Tree: 2 + 1
+\end{lstlisting}
+\Tree [.Exp [.Exp [.Exp1 [.Integer 2 ]]] [.+ ] [.Exp1 [.Exp2 [.Integer 1 ]]]]
+
+\begin{lstlisting}
 Abstract Syntax Tree: 1 + 2 * 3
     Plus (Num 1) (Times (Num 2) (Num 3))
 \end{lstlisting}
@@ -508,28 +513,47 @@ EVar (Id "a")
 \subsection{Week 6}
 Evaluate
 \begin{lstlisting}
-(\exp . \two . \three . exp two three)
+(\exp.\two.\three. exp two three)
+
 (\m.\n. m n)
+
 (\f.\x. f (f x))
+
 (\f.\x. f (f (f x)))
-=
-((\m.\n. m n) (\f.\x. f (f x)) (\f2.\x2. f2 (f2 (f2 x2))))
-=
-((.\n. (\f.\x. f (f x)) n)  (\f2.\x2. f2 (f2 (f2 x2))))
-=
-((\f.\x. f (f x)) (\f2.\x2. f2 (f2 (f2 x2))))
-=
-((\x. (\f2.\x2. f2 (f2 (f2 x2))) ((\f3.\x3. f3 (f3 (f3 x3))) x)))
-=
-((\x. (\f2.\x2. f2 (f2 (f2 x2))) ((\x3. x (x (x x3))))))
-=
-(\x. (\x2. (\x3. x (x (x x3))) ((\x4. x5 (x5 (x5 x4))) ((\x6. x7 (x7 (x7 x6))) x2))))
-=
-(\x. (\x2. (\x3. x (x (x x3))) ((\x4. x5 (x5 (x5 x4))) (x7 (x7 (x7 x2))))))
-=
-(\x. (\x2. (x (x (x (x5 (x5 (x5 (x7 (x7 (x7 x2)))))))))))
-=
-\x. (\x2. (x (x (x (x5 (x5 (x5 (x7 (x7 (x7 x2))))))))))
+
+Substitute the terms as shown in the following:
+
+((\m.\n. m n) \two. \three. two three) =
+
+((\m.\n. m n) (\f.\x. f (f x)) \three. three) =
+
+((\m.\n. m n) (\f.\x. f (f x)) (\f.\x. f (f (f x)))) =
+
+((\m.\n. m n) (\f0.\x0. f0 (f0 x0)) (\f1.\x1. f1 (f1 (f1 x1)))) =
+
+((\n. (\f0. \x0. f0 (f0 x0)) n) (\f1. \x1. f1 (f1 (f1 x1)))) =
+
+((\f0.\x0. f0 (f0 x0)) (\f1.\x1. f1 (f1 (f1 x1)))) =
+
+((\x0. (\f1.\x1. f1 (f1 (f1 x1))) ((\f1.\x1. f1 (f1 (f1 x1))) x0))) =
+
+((\x0. (\f1.\x1. f1 (f1 (f1 x1))) ((\f1.\x1. f1 (f1 (f1 x1))) x0))) =
+
+((\x0. (\x1. ((\f1.\x1. f1 (f1 (f1 x1))) x0) (((\f1.\x1. f1 (f1 (f1 x1))) x0) (((\f1.\x1. f1 (f1 (f1 x1))) x0) x1))))) =
+
+((\x0. (\x1. ((\x1. x0 (x0 (x0 x1)))) (((\f1.\x1. f1 (f1 (f1 x1))) x0) (((\f1.\x1. f1 (f1 (f1 x1))) x0) x1))))) =
+
+((\x0. (\x1. ((\x1. x0 (x0 (x0 x1)))) (((\x1. x0 (x0 (x0 x1)))) (((\f1.\x1. f1 (f1 (f1 x1))) x0) x1))))) =
+
+((\x0. (\x1. ((\x1. x0 (x0 (x0 x1)))) (((\x1. x0 (x0 (x0 x1)))) (((\x1. x0 (x0 (x0 x1)))) x1))))) =
+
+((\x0. (\x1. ((\x1. x0 (x0 (x0 x1)))) (((\x1. x0 (x0 (x0 x1)))) (((x0 (x0 (x0 x1))))))))) =
+
+((\x0. (\x1. ((\x1. x0 (x0 (x0 x1)))) (((x0 (x0 (x0 ((x0 (x0 (x0 x1)))))))))))) =
+
+((\x0. (\x1. (x0 (x0 (x0 (((x0 (x0 (x0 ((x0 (x0 (x0 x1))))))))))))))) =
+
+(\x0. (\x1. (x0 (x0 (x0 (x0 (x0 (x0 (x0 (x0 (x0 x1)))))))))))
 \end{lstlisting}
 %
 
@@ -641,12 +665,12 @@ e2 (line 21)
 \begin{lstlisting}
 - Evaluate (\x.\y.x) y z by executing the function evalCBN
 
-evalCBN(EApp (EAbs (Id "x") (EAbs (Id "y") (EVar (Id "z")))) (EVar (Id "y")) (EVar (Id "z"))) = line 6
-evalCBN (subst (Id "x") (EVar (Id "y")) (EVar (Id "x")) (EAbs (Id "y") (EVar (Id "x")))(EVar (Id "z"))) = line 15
-evalCBN (EApp (EAbs (Id "y") (EVar (Id "y1"))) EVar (Id "z")) = line 6
-evalCBN (subst (Id "y") (EVar (Id "z")) (EVar (Id "y1"))) = line 16
-evalCBN (EVar (Id "y1")) = line 8
-EVar (Id "y1")
+evalCBN(EApp (EAbs (Id "x") (EAbs (Id "y") (EVar (Id "z")))) (EVar (Id "y")) (EVar (Id "z"))) -- line 6
+evalCBN (subst (Id "x") (EVar (Id "y")) (EVar (Id "x")) (EAbs (Id "y") (EVar (Id "x")))(EVar (Id "z"))) -- line 15
+evalCBN (EApp (EAbs (Id "y") (EVar (Id "y1"))) EVar (Id "z")) -- line 6
+evalCBN (subst (Id "y") (EVar (Id "z")) (EVar (Id "y1"))) -- line 15
+evalCBN (EVar (Id "z")) -- line 8
+EVar (Id "z")
 \end{lstlisting}
 %
 
@@ -818,17 +842,18 @@ Why does the ARS not terminate?
     The ARS doesn't terminate because the two rules ba -> ab and ab -> ba are circular.
 
 What are the normal forms?
-    The normal forms are a, b
+    The normal forms are a, b, []
 
 Can you change the rules so that the new ARS has unique normal forms (but still has the same equivalence relation)?
+    Yes, the rules can be changed so that the new ARS has unique normal forms. This can be done by removing the rule ab -> ba.
+    
     aa -> a
     bb -> b
     ba -> ab
-    ab -> ba
-    b -> a
+    
 
 What do the normal forms mean? Describe the function implemented by the ARS.
-    The normal forms mean that at that point, nothing can be reduced further. The ARS takes a string consisting of a's and b's. If there are doubles (ie aa or bb), then the length of those doubles is reduced. In the case of ba or ab, then the letters are flipped.
+    The normal forms mean that at that point, nothing can be reduced further. The ARS takes a string consisting of a's and b's. If there are doubles (ie aa or bb), then the length of those doubles is reduced. In the case of ba or ab, then the letters are flipped. Ultimately, the ARS reduces the length of the left-hand side of the string.
 
 \end{lstlisting}
 %
@@ -859,16 +884,16 @@ The upper section of the ARS (involving ba, ab, ac, ca, bc, cb) is circular. The
 \subsection{Week 10}
 Activity and Homework: 
 \newline\indent
-Let F be $\lambda$f.$\lambda$n. if n==0 then 1 else f(n-1)*n and reduce fixF2.
+Let F be $\lambda$f.$\lambda$n. if n==0 then 1 else f(n-1)*n and reduce fix F 2.
 \newline\indent
-fixF $\approx$ FfixF (computation rule)
+fix F $\approx$ F fix F (computation rule)
 
 \begin{lstlisting}
-fixF 2 = FfixF 2 = if 2 == 0 then 1 else fixF (2-1)*2  --> assume we have a function for 2-1
-                   = (fixF 1) * 2
-                   = (FfixF 1 = if 1 == 0 then 1 else fixF (1-1) * 1) * 2
-                                = (fixF 0) * 2
-                                = (FfixF 0 if 0 == 0 then 1) * 2
+fix F 2 = F fix F 2 = if 2 == 0 then 1 else fix F (2-1)*2  --> assume we have a function for 2-1
+                   = (fix F 1) * 2
+                   = (F fix F 1 = if 1 == 0 then 1 else fix F (1-1) * 1) * 2
+                                = (fix F 0) * 2
+                                = (F fix F 0 if 0 == 0 then 1) * 2
                                 = 1 * 2
                                 = 2
                
@@ -902,30 +927,70 @@ Response: I agree with Eli that visual scripting or drag/drop implementation wou
 \noindent\textbf{What is the invariant? Indicate the reasoning steps in which you apply the rules of Hoare logic.}\newline
 
 \textbf{Pre and post conditions:}
-\newline $\{x \geq 0\}$  while (x!=0) do  z:=z*y; x:= x-1 done $\{post\}$ \newline
+\newline $\{x \geq 0\}$  while (x!=0) do  z:=z*y; x:= x-1 done $\{post\}$
+
+The while loop's rule is:
+
+\medskip
+\texttt{$\frac{\{I\} S \{I\}} {\{I\} while B do S done \{ \neg B \wedge I \}}$}
+\medskip
+\newline
+\texttt{S} represents z := z * y; x := x - 1, while \texttt{I} represents the while loop invariant.\newline
+
 \textbf{Table of execution:}
-\newline Where t is the number of times the loop executes, and assume program variables are as follows: x=5, y=2, z=2.
+\newline Where t is the number of times the loop executes, and assume program variables are as follows: x=5, y=2, z=1.
 \begin{center}
-\begin{tabular}{ c c c c }
- t & x & y & z \\ 
- 0 & 5 & 2 & 2 \\  
- 1 & 4 & 2 & 4 \\
- 2 & 3 & 2 & 8 \\
- 3 & 2 & 2 & 16 \\
- 4 & 1 & 2 & 32 \\
- 5 & 0 & 2 & 64 
+\begin{tabular}{ c c c c } 
+ t & x & y & z \\ [0.5ex] 
+0 & 5 & 2 & 0 \\ 
+1 & 4 & 2 & 2 \\
+2 & 3 & 2 & 4 \\
+3 & 2 & 2 & 8 \\
+4 & 1 & 2 & 16 \\ 
+5 & 0 & 2 & 32 \\ 
 \end{tabular}
 \end{center}
-The above numbers satisfy the following invariants:
-\[t + x = 5\]
-\[z = y^t * 2\]
-\[z = y^{x-5} * 2\]
 
-However, this is only the case for the number and table above. To make this more general, we must store the original values of x, y, and z for calculations. To do so, let x = n, y = k, z = m.
-\[z = k^n * m \] 
+\medskip\noindent
+With precondition of \texttt{x $\geq$ 0 $\wedge$ z = 1}, the postcondition of \texttt{z = $y^x$} and the table, the invariants are \texttt{t + x = 5} and \texttt{z = $y^t$}. Hence, the invariant \texttt{z = $y^{(5 - x)}$}. 
 
-This gives us 
-\[\{x=n \wedge z=m \wedge y=k\} \quad while \quad (x!=0) do \quad z:=z*y; \quad x:= x-1 \quad done \quad \{z=n+m*k\}\]
+\medskip\noindent
+The invariant is \texttt{z = $y^{(m - x)}$}, where \texttt{m} represents the number of loops. We add the variable \texttt{n} to the invariant, so that \texttt{z = n + $y^{(m - x)}$}. However, \texttt{n} would have to be 0, because we there is no addition in the postcondition that we found above. We then replace \texttt{y} with \texttt{k}. Thus, $\{I\}$ is \texttt{z = $k^{(m - x)}$}.
+
+\medskip\noindent
+Returning to the loop rule:
+\medskip
+\texttt{$\frac{\{I\} S \{I\}} {\{I\} while B do S done \{ \neg B \wedge I \}}$}
+
+\medskip\noindent
+Let \texttt{ $\{ \neg B \wedge I \}$} be \texttt{z = $k^{(m - x)}$}. \texttt{$\neg B$} is equal to \texttt{$\neg(\neg(x = 0))$} or \texttt{x = 0} (we know that \texttt{x} is equal to 0 once the while loop terminates). That leaves us with \texttt{$\{I\}$ while B do S done $\{ z = k^{(m - x)} \}$}. 
+
+\medskip\noindent
+The rule for composition is:
+\medskip
+\texttt{$\frac{\{P\} S \{Q\}     \{Q\} T \{R\}} {\{P\} S; T \{R \}}$}
+
+\medskip\noindent
+Plugging in our equations we get:
+\medskip
+\texttt{$\frac{\{P\} z := z * y \{Q\}     \{Q\} x := x - 1 \{I\}} {\{I \wedge B\} z := z * y; x := x - 1 \{I \}}$}
+
+\medskip\noindent
+Then, we calculate \texttt{Q}  and \texttt{P} and get:
+
+\medskip
+\texttt{$\frac{\{z + y = n + k^{(m - (x - 1))}\} z := z * y \{z = n + k^{(m - (x - 1))}\} x := x - 1 \{I\}} {\{I \wedge B\} z := z * y; x := x - 1 \{I \}}$}
+
+\medskip\noindent
+Algebra:
+\newline\indent z + k = n + $k^{(m - (x -1))}$
+\newline\indent z + k = n + $k^{(m - x + 1)}$
+\newline\indent z + k = n + $k^{(m - x)}$ + $k^1$
+\newline\indent z = n + $k^{(m - x)}$
+
+\medskip\noindent
+Therefore, our invariant is \texttt{z = n + $k^{(m - x)}$}.
+
  
 \section{Project}
 
@@ -942,6 +1007,7 @@ The first milestone due date is 11/28. It will consist of a short writeup on the
 \noindent\textbf{Milestone 2 (12/2):}
 \newline\indent
 The second milestone due date is 12/2. This milestone will consist of a more fleshed out description and design of how the website will look and what it will contain. A clear plan of what needs to be implemented and the steps that need to be taken will be finalized. At this point, code will also be mailed to the professor for a progress check and possible feedback.\newline
+
 \noindent\textbf{Milestone 3 (12/7):}
 \newline\indent
 The third milestone due date is 12/7. This milestone will contain updated progress on the website. Additionally, it will include the beginnings of a synthesis on the process of learning html/css. This will be a commentary on my thoughts as I learned these languages, as well as things I wish I had learned sooner during the process. The ultimate goal is to try to put my learning process into words so that I can apply better learning techniques when I pick up new languages in the future.
