@@ -63,6 +63,14 @@ body{
     object-fit: cover;
     object-position: center;
 }
+.blog-post-img img{
+    width: 500px;
+    height: 500px;
+    object-fit: cover;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
 .blog-text{
     padding: 30px;
     display: flex;
@@ -90,6 +98,23 @@ body{
     overflow: hidden;
     text-overflow: ellipsis;
     margin: 20px 0px;
+}
+.blog-post-text p{
+    color: #9b9b9b;
+    font-size: 0.9rem;
+    margin: 20px 100px;
+}
+.blog-post-links p{
+    color: #9b9b9b;
+    font-size: 0.9rem;
+    margin: 20px 100px;
+}
+.blog-post-links a{
+    color: #0f0f0f;
+}
+.blog-post-links a:hover{
+    color: #f33c3c;
+    transition: all ease 0.3s;
 }
 .blog-text a{
     color: #0f0f0f;
